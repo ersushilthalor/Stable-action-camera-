@@ -1,0 +1,6 @@
+{
+  "name": "Stable Action",
+  "description": "Samsung Super Steady Horizon Lock camera app for Android with 360-degree roll and translation stabilization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
