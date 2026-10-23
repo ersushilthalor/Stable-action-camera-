@@ -35,9 +35,8 @@ jobs:
           yes | "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --licenses
           "${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager" --install \
             "platform-tools" \
-            "platforms;android-36" \
-            "platforms;android-36-ext1" \
-            "build-tools;36.0.0"
+            "platforms;android-36.1" \
+            "build-tools;36.1.0"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
