@@ -4,10 +4,18 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     steps:
       - name: Checkout source
@@ -17,7 +25,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: '17'
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -25,11 +33,24 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Validate Gradle wrapper
+        run: |
+          test -f gradlew
+          chmod +x gradlew
+          test -f gradle/wrapper/gradle-wrapper.properties
+
       - name: Build Debug APK
-        run: gradle assembleDebug --stacktrace
+        run: ./gradlew --no-daemon --stacktrace clean assembleDebug
+
+      - name: Verify APK output
+        run: |
+          find app/build/outputs/apk -type f -name '*.apk' -print
+          test -n "$(find app/build/outputs/apk -type f -name '*.apk' -print -quit)"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: stable-action-camera-debug-apk
+          path: app/build/outputs/apk/**/*.apk
+          if-no-files-found: error
+          retention-days: 7
