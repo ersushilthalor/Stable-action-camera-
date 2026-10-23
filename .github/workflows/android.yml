@@ -40,15 +40,15 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
+          validate-wrappers: false
 
-      - name: Validate Gradle wrapper
-        run: |
-          test -f gradlew
-          chmod +x gradlew
-          test -f gradle/wrapper/gradle-wrapper.properties
+      - name: Verify Gradle installation
+        run: gradle --version
 
       - name: Build Debug APK
-        run: ./gradlew --no-daemon --stacktrace clean assembleDebug
+        run: gradle --no-daemon --stacktrace clean assembleDebug
 
       - name: Verify APK output
         run: |
